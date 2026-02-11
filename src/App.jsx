@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { renderASCII, validateFile } from './utils/asciiRenderer';
+import './App.css';
 
 function App() {
   const [error, setError] = useState(null);
