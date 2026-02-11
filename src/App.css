@@ -178,3 +178,23 @@ pre {
   outline: none;
   border-color: #4a9eff;
 }
+
+/* Console output styles */
+.console-container {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.console-text {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #00ff00;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+}

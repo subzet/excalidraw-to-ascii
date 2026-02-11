@@ -1,0 +1,106 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "rect1",
+      "type": "rectangle",
+      "x": 100,
+      "y": 100,
+      "width": 200,
+      "height": 100,
+      "seed": 1
+    },
+    {
+      "id": "text1",
+      "type": "text",
+      "x": 130,
+      "y": 140,
+      "text": "Login",
+      "fontSize": 20,
+      "seed": 2
+    },
+    {
+      "id": "diamond1",
+      "type": "diamond",
+      "x": 400,
+      "y": 100,
+      "width": 150,
+      "height": 100,
+      "seed": 3
+    },
+    {
+      "id": "text2",
+      "type": "text",
+      "x": 440,
+      "y": 140,
+      "text": "Valid?",
+      "fontSize": 16,
+      "seed": 4
+    },
+    {
+      "id": "arrow1",
+      "type": "arrow",
+      "x": 300,
+      "y": 150,
+      "points": [[0, 0], [100, 0]],
+      "seed": 5
+    },
+    {
+      "id": "rect2",
+      "type": "rectangle",
+      "x": 650,
+      "y": 100,
+      "width": 180,
+      "height": 80,
+      "seed": 6
+    },
+    {
+      "id": "text3",
+      "type": "text",
+      "x": 680,
+      "y": 130,
+      "text": "Dashboard",
+      "fontSize": 18,
+      "seed": 7
+    },
+    {
+      "id": "arrow2",
+      "type": "arrow",
+      "x": 550,
+      "y": 150,
+      "points": [[0, 0], [100, 0]],
+      "seed": 8
+    },
+    {
+      "id": "ellipse1",
+      "type": "ellipse",
+      "x": 450,
+      "y": 300,
+      "width": 120,
+      "height": 60,
+      "seed": 9
+    },
+    {
+      "id": "text4",
+      "type": "text",
+      "x": 470,
+      "y": 320,
+      "text": "Error",
+      "fontSize": 16,
+      "seed": 10
+    },
+    {
+      "id": "arrow3",
+      "type": "arrow",
+      "x": 475,
+      "y": 200,
+      "points": [[0, 0], [0, 100]],
+      "seed": 11
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff"
+  }
+}

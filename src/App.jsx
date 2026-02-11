@@ -9,6 +9,8 @@ function App() {
   const [hasData, setHasData] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState('Copy to clipboard');
+  const [consoleOutput, setConsoleOutput] = useState('');
+  const [showConsole, setShowConsole] = useState(false);
   
   // Options state
   const [showText, setShowText] = useState(true);
@@ -17,22 +19,47 @@ function App() {
   
   const fileInputRef = useRef(null);
   const currentDataRef = useRef(null);
+  const currentFileRef = useRef(null);
 
-  const processData = useCallback((data) => {
+  const generateConsoleOutput = useCallback((data, fileName) => {
+    const timestamp = new Date().toLocaleTimeString();
+    const lines = [
+      `[${timestamp}] Loading file: ${fileName}`,
+      `[${timestamp}] Parsing Excalidraw JSON...`,
+      `[${timestamp}] Found ${data.elements?.length || 0} elements`,
+      `[${timestamp}] Calculating bounds...`,
+      `[${timestamp}] Rendering ASCII with scale=${scale}, showText=${showText}, doubleLines=${doubleLines}`,
+      `[${timestamp}] Done!`,
+      ``,
+      `--- Generated ASCII ---`,
+      output,
+      `--- End ---`,
+    ];
+    return lines.join('\n');
+  }, [output, scale, showText, doubleLines]);
+
+  const processData = useCallback((data, fileName = 'file.excalidraw') => {
     currentDataRef.current = data;
     const result = renderASCII(data, { showText, doubleLines, scale });
     setOutput(result.ascii);
     setStats(result.stats);
     setHasData(true);
-  }, [showText, doubleLines, scale]);
+    
+    // Generate console output
+    const consoleText = generateConsoleOutput(data, fileName);
+    setConsoleOutput(consoleText);
+    setShowConsole(true);
+  }, [showText, doubleLines, scale, generateConsoleOutput]);
 
   const processFile = useCallback((file) => {
     setError(null);
+    currentFileRef.current = file;
     
     const validationError = validateFile(file);
     if (validationError) {
       setError(validationError);
       setHasData(false);
+      setShowConsole(false);
       return;
     }
 
@@ -40,10 +67,11 @@ function App() {
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target.result);
-        processData(data);
+        processData(data, file.name);
       } catch (err) {
         setError('Invalid JSON file: ' + err.message);
         setHasData(false);
+        setShowConsole(false);
       }
     };
     reader.readAsText(file);
@@ -81,14 +109,31 @@ function App() {
     });
   }, [output]);
 
+  const handleCopyConsole = useCallback(() => {
+    navigator.clipboard.writeText(consoleOutput).then(() => {
+      setCopyFeedback('Console copied!');
+      setTimeout(() => setCopyFeedback('Copy to clipboard'), 1500);
+    });
+  }, [consoleOutput]);
+
   // Re-render when options change
   const handleOptionChange = useCallback(() => {
-    if (currentDataRef.current) {
+    if (currentDataRef.current && currentFileRef.current) {
       const result = renderASCII(currentDataRef.current, { showText, doubleLines, scale });
       setOutput(result.ascii);
       setStats(result.stats);
+      
+      // Update console output
+      const consoleText = generateConsoleOutput(currentDataRef.current, currentFileRef.current.name);
+      setConsoleOutput(consoleText);
     }
-  }, [showText, doubleLines, scale]);
+  }, [showText, doubleLines, scale, generateConsoleOutput]);
+
+  const handleGenerate = useCallback(() => {
+    if (currentDataRef.current && currentFileRef.current) {
+      handleOptionChange();
+    }
+  }, [handleOptionChange]);
 
   return (
     <div className="container">
@@ -161,6 +206,9 @@ function App() {
                 onBlur={handleOptionChange}
               />
             </div>
+            <button className="btn btn-primary" onClick={handleGenerate}>
+              🔄 Regenerate
+            </button>
           </div>
 
           <div className="section-header">
@@ -175,6 +223,20 @@ function App() {
           </div>
           
           <div className="stats">{stats}</div>
+
+          {showConsole && (
+            <>
+              <div className="section-header" style={{ marginTop: '24px' }}>
+                <span className="section-title">🖥️ Console Output</span>
+                <button className="btn" onClick={handleCopyConsole}>
+                  Copy console
+                </button>
+              </div>
+              <div className="console-container">
+                <pre className="console-text">{consoleOutput}</pre>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
